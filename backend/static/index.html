@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KratosSecure | Healthcare Operations AI Agent & Adversarial Testing Twin</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+  <!-- Top Command Header -->
+  <header class="top-header">
+    <div class="brand-section">
+      <div class="brand-badge">KRATOS SECURE | PHASE 3 RESEARCH PLATFORM</div>
+      <div>
+        <div class="hospital-title">
+          <span>Aethelgard Memorial Hospital</span>
+          <span class="status-dot dot-green" id="headerStatusDot" title="System Operational"></span>
+        </div>
+        <div class="hospital-sub">Autonomous AI Testing Sandbox | Digital Twin & Adaptive Security Research Engine</div>
+      </div>
+    </div>
+
+    <!-- Active Actor Persona Switcher -->
+    <div class="actor-switcher-container">
+      <span class="actor-label">Active Actor:</span>
+      <select id="actorSelect" class="actor-select" onchange="window.switchActor(this.value)">
+        <option value="dr_elena_vance">Dr. Elena Vance, MD (Doctor - IPD)</option>
+        <option value="dr_marcus_brody">Dr. Marcus Brody, MD (Doctor - ED)</option>
+        <option value="nurse_sarah_connor">Nurse Sarah Connor, RN (Nurse - ICU)</option>
+        <option value="nurse_david_kim">Nurse David Kim, BSN (Nurse - IPD)</option>
+        <option value="tech_rachel_zane">Rachel Zane, MLS (Lab Technician)</option>
+        <option value="pharm_james_wilson">Dr. James Wilson, PharmD (Pharmacist)</option>
+        <option value="billing_arthur_dent">Arthur Dent (Billing Officer)</option>
+        <option value="mro_diana_prince">Diana Prince, RHIA (Medical Records)</option>
+        <option value="admin_sterling_archer">Sterling Archer, MHA (Hospital Admin)</option>
+        <option value="it_elliot_alderson">Elliot Alderson (IT Administrator)</option>
+        <option value="sec_john_connor">John Connor, CISSP (Security Officer)</option>
+        <option value="agent_kratos_ai">Kratos Operational AI (Healthcare AI Agent)</option>
+        <option value="adversarial_infiltrator">Shadow Infiltrator (Adversarial Agent)</option>
+      </select>
+      <span id="actorRoleBadge" class="actor-badge badge-operational">Doctor</span>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="app-container">
+    <nav class="nav-tabs-bar">
+      <button class="tab-btn active" onclick="window.switchTab('overview', this)">
+        <span>🏥</span> Overview
+      </button>
+      <button class="tab-btn" onclick="window.switchTab('agent', this)">
+        <span>🤖</span> HOSA Agent Console
+      </button>
+      <button class="tab-btn" onclick="window.switchTab('adversarial', this)">
+        <span>🎯</span> AAVA Adversarial Suite
+      </button>
+      <button class="tab-btn" onclick="window.switchTab('analytics', this)">
+        <span>📊</span> Security Analytics
+      </button>
+      <button class="tab-btn" onclick="window.switchTab('experiments', this)">
+        <span>🧪</span> Experiments (Profiles A-E)
+      </button>
+      <button class="tab-btn" onclick="window.switchTab('counterfactual', this)">
+        <span>🔮</span> Counterfactual Studio
+      </button>
+      <button class="tab-btn" onclick="window.switchTab('intelligence', this)">
+        <span>🧠</span> Scenario Intelligence
+      </button>
+      <button class="tab-btn" onclick="window.switchTab('reports', this)">
+        <span>📈</span> Datasets & Reports
+      </button>
+      <button class="tab-btn" onclick="window.switchTab('library', this)">
+        <span>📚</span> Test Case Library
+      </button>
+      <button class="tab-btn" onclick="window.switchTab('infrastructure', this)">
+        <span>🗺️</span> Infrastructure Map
+      </button>
+      <button class="tab-btn" onclick="window.switchTab('patients', this)">
+        <span>👥</span> Patients
+      </button>
+      <button class="tab-btn" onclick="window.switchTab('resources', this)">
+        <span>🩺</span> Staff & Resources
+      </button>
+      <button class="tab-btn" onclick="window.switchTab('scenarios', this)">
+        <span>⚡</span> Scenarios & Controls
+      </button>
+      <button class="tab-btn" onclick="window.switchTab('audit', this)">
+        <span>🔒</span> Audit Ledger
+      </button>
+      <button class="tab-btn" onclick="window.switchTab('matrix', this)">
+        <span>🛡️</span> RBAC Matrix
+      </button>
+    </nav>
+
+    <!-- TAB 1: HOSPITAL OVERVIEW -->
+    <section id="pane-overview" class="content-pane active">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-title">Total Beds Capacity</div>
+          <div class="kpi-value" id="kpiTotalBeds">500</div>
+          <div class="kpi-subtext">
+            <span id="kpiOccupiedBeds">380</span> Occupied (<span id="kpiOccupancyRate">76.0%</span>)
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="kpiOccupancyFill" style="width: 76%;"></div>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-title">ICU Bed Occupancy</div>
+          <div class="kpi-value" id="kpiIcuBeds">50</div>
+          <div class="kpi-subtext">
+            <span id="kpiOccupiedIcu">38</span> Occupied | <span id="kpiAvailableIcu">12</span> Free
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="kpiIcuFill" style="width: 76%; background: var(--accent-amber);"></div>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-title">Emergency Department</div>
+          <div class="kpi-value" id="kpiEdWait">25 min</div>
+          <div class="kpi-subtext">
+            <span class="status-dot dot-green" id="edDot"></span>
+            <span id="kpiEdActive">32 Active Patients</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-title">Ambulance Fleet</div>
+          <div class="kpi-value" id="kpiAmbulances">5 / 8</div>
+          <div class="kpi-subtext">Available ALS / BLS units</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-title">HOSA Agent Status</div>
+          <div class="kpi-value" style="color: var(--accent-cyan);">ONLINE</div>
+          <div class="kpi-subtext">
+            <span class="status-dot dot-green"></span> Zero-Trust Gateway Guard
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-title">AAVA Adversary</div>
+          <div class="kpi-value" style="color: var(--accent-purple);">ARMED</div>
+          <div class="kpi-subtext">20 Healthcare Test Vectors Ready</div>
+        </div>
+      </div>
+
+      <!-- Quick Action Banners -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 24px;">
+        <div class="card-panel" style="border-left: 4px solid var(--accent-cyan); display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <span style="font-size: 11px; text-transform: uppercase; color: var(--accent-cyan); font-weight: 700;">Target Agent</span>
+            <h3 style="font-size: 16px; margin-top: 2px;">HOSA Operations Assistant</h3>
+            <p style="color: var(--text-secondary); font-size: 12px; margin-top: 4px;">Assists with clinical documentation, billing, bed capacity & staff scheduling.</p>
+          </div>
+          <button class="patient-action-btn" onclick="window.switchTab('agent')" style="padding: 8px 14px;">Open Console 🤖</button>
+        </div>
+
+        <div class="card-panel" style="border-left: 4px solid var(--accent-rose); display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <span style="font-size: 11px; text-transform: uppercase; color: var(--accent-rose); font-weight: 700;">Adversarial Engine</span>
+            <h3 style="font-size: 16px; margin-top: 2px;">AAVA Security Validator</h3>
+            <p style="color: var(--text-secondary); font-size: 12px; margin-top: 4px;">Executes prompt injections, privilege escalation, and cross-patient probes.</p>
+          </div>
+          <button class="patient-action-btn" onclick="window.switchTab('adversarial')" style="padding: 8px 14px; background: var(--accent-rose); color: #fff;">Run Suite 🎯</button>
+        </div>
+      </div>
+
+      <!-- Subsystems Health Grid -->
+      <div class="card-panel">
+        <div class="section-header">
+          <div class="section-title"><span>⚙️</span> Clinical Infrastructure Subsystems</div>
+          <span style="font-size: 12px; color: var(--text-muted);">Real-Time Latency & Availability</span>
+        </div>
+        <div id="subsystemsContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px;"></div>
+      </div>
+    </section>
+
+    <!-- TAB 2: HOSA AGENT CONSOLE (PHASE 2) -->
+    <section id="pane-agent" class="content-pane">
+      <div class="section-header">
+        <div>
+          <div class="section-title"><span>🤖</span> HOSA: Hospital Operations Support Agent</div>
+          <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">
+            Deterministic healthcare support agent operating through the Zero-Trust Tool Gateway.
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <span style="font-size: 12px; color: var(--text-muted);">Active Patient Context:</span>
+          <select id="agentPatientContextSelect" class="actor-select" style="font-size: 12px;">
+            <option value="1">Patient #1 (Elena Chen - IPD)</option>
+            <option value="2">Patient #2 (Sophia Rodriguez - ICU)</option>
+            <option value="3">Patient #3 (Marcus Patel - ED)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+        <!-- Chat Console -->
+        <div class="agent-chat-container">
+          <div class="agent-messages-box" id="agentChatBox">
+            <div class="message-bubble msg-agent">
+              <strong>HOSA Operations Agent:</strong><br>
+              Hello, I am HOSA. I assist clinical and administrative teams with patient documentation, encounter summaries, bed availability checks, and duty schedules. How can I assist you today?
+            </div>
+          </div>
+          <div class="agent-input-bar">
+            <input type="text" id="agentPromptInput" placeholder="Enter clinical or operational request (e.g. 'Summarize encounters for Patient #1' or 'Check ICU capacity')..." 
+                   style="flex: 1; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px 14px; border-radius: var(--radius-sm); font-size: 13px;"
+                   onkeyup="if(event.key==='Enter') window.sendAgentPrompt()">
+            <button class="patient-action-btn" onclick="window.sendAgentPrompt()" style="padding: 10px 20px; font-weight: 600;">Execute Tool 🚀</button>
+          </div>
+        </div>
+
+        <!-- Agent Guardrails & Tool Inventory -->
+        <div>
+          <div class="card-panel" style="margin-bottom: 16px;">
+            <h4 style="color: var(--accent-cyan); font-size: 13px; margin-bottom: 8px;">Active Operational Boundary</h4>
+            <ul style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; padding-left: 16px;">
+              <li>🔒 Tool Gateway Enforced (No Direct DB Access)</li>
+              <li>🚫 No Autonomous Prescriptions or Clinical Alteration</li>
+              <li>🛡️ Untrusted Document Content Sanitized</li>
+              <li>👥 Strict Cross-Patient Session Isolation</li>
+              <li>📋 Dual Clinician Approval for High-Risk Actions</li>
+            </ul>
+          </div>
+
+          <div class="card-panel">
+            <h4 style="color: var(--accent-emerald); font-size: 13px; margin-bottom: 8px;">Available Gateway Tools (18 Tools)</h4>
+            <div id="agentToolsList" style="font-size: 11px; max-height: 280px; overflow-y: auto;">
+              <!-- Loaded via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: AAVA ADVERSARIAL SUITE (PHASE 2) -->
+    <section id="pane-adversarial" class="content-pane">
+      <div class="section-header">
+        <div>
+          <div class="section-title"><span>🎯</span> AAVA: Adaptive Adversarial Validation Engine</div>
+          <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">
+            Simulates realistic healthcare cyber-attacks, prompt injections, and privilege escalations against HOSA.
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <button class="patient-action-btn" onclick="window.runAdaptiveProbe()" style="background: var(--accent-purple); color: #fff; padding: 8px 14px; font-weight: 600;">
+            Generate Adaptive Probe 🎲
+          </button>
+          <button class="patient-action-btn" onclick="window.runFullTestSuite()" style="background: var(--accent-rose); color: #fff; padding: 8px 16px; font-weight: 600;">
+            Run All 20 Test Cases ⚡
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Test Runner Panel -->
+      <div class="card-panel" style="margin-bottom: 20px;">
+        <h4 style="font-size: 14px; margin-bottom: 12px; color: var(--accent-cyan);">Select Individual Adversarial Test Scenario</h4>
+        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+          <select id="adversarialScenarioSelect" class="actor-select" style="min-width: 420px; font-size: 13px;">
+            <!-- Options populated from TEST_CASES_LIBRARY -->
+          </select>
+          <button class="control-btn" style="width: auto; margin-top: 0; padding: 8px 20px;" onclick="window.runSelectedAdversarialTest()">
+            Execute Attack Vector 🚀
+          </button>
+        </div>
+        <div id="activeTestPreview" style="margin-top: 12px; font-size: 12px; color: var(--text-secondary);"></div>
+      </div>
+
+      <!-- Live Execution Trace Section -->
+      <div class="card-panel">
+        <div class="section-header">
+          <div class="section-title"><span>📜</span> Execution Trace & Behavioral Observer</div>
+          <span style="font-size: 12px; color: var(--text-muted);" id="traceStatusBadge">Awaiting Test Execution</span>
+        </div>
+        <div class="timeline-container" id="executionTimeline">
+          <p style="color: var(--text-muted); font-size: 13px; text-align: center; padding: 30px;">
+            Select a test case above and click "Execute Attack Vector" to observe real-time HOSA interpretation, gateway authorization, and AAVA classification.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: SECURITY ANALYTICS & HEATMAP (PHASE 2) -->
+    <section id="pane-analytics" class="content-pane">
+      <div class="section-header">
+        <div class="section-title"><span>📊</span> Healthcare Security & Agent Utility Metrics</div>
+        <button class="patient-action-btn" onclick="window.loadAnalytics()">Refresh Metrics 🔄</button>
+      </div>
+
+      <!-- Summary KPI Scorecards -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-title">Attack Success Rate (ASR)</div>
+          <div class="kpi-value" id="metricAsr" style="color: var(--accent-emerald);">0.0%</div>
+          <div class="kpi-subtext"><span class="status-dot dot-green"></span> 0 Breaches Detected</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-title">Agent Utility Score</div>
+          <div class="kpi-value" id="metricUtility" style="color: var(--accent-cyan);">98.0 / 100</div>
+          <div class="kpi-subtext">Composite Security + Operational Utility</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-title">Legitimate Completion</div>
+          <div class="kpi-value" id="metricCompletion">100%</div>
+          <div class="kpi-subtext">Non-Adversarial Requests Fulfilled</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-title">Avg Detection Latency</div>
+          <div class="kpi-value" id="metricLatency">18 ms</div>
+          <div class="kpi-subtext">Gateway Policy Enforcement Speed</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-title">Canary Trap Detections</div>
+          <div class="kpi-value" id="metricCanaries" style="color: var(--accent-amber);">100%</div>
+          <div class="kpi-subtext">Honeypot Sensor Precision</div>
+        </div>
+      </div>
+
+      <!-- Attack Category Heatmap -->
+      <div class="card-panel">
+        <div class="section-header">
+          <div class="section-title"><span>🔥</span> Vulnerability Category Resilience Heatmap</div>
+          <span style="font-size: 12px; color: var(--text-muted);">Evaluation Across 7 Taxonomy Domains</span>
+        </div>
+        <div class="heatmap-grid" id="analyticsHeatmap">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: TEST CASE LIBRARY (PHASE 2) -->
+    <section id="pane-library" class="content-pane">
+      <div class="section-header">
+        <div>
+          <div class="section-title"><span>📚</span> Healthcare Vulnerability Test Library (20 Scenarios)</div>
+          <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">
+            Searchable test suite covering Data Privacy, Prompt Injections, Privilege Escalations, and Compound Attacks.
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <select id="libraryCategoryFilter" class="actor-select" style="font-size: 12px;" onchange="window.filterLibrary()">
+            <option value="">All 7 Categories</option>
+            <option value="CATEGORY_A">Category A: Data Access & Privacy</option>
+            <option value="CATEGORY_B">Category B: Prompt Injection & Data Poisoning</option>
+            <option value="CATEGORY_C">Category C: Privilege Escalation</option>
+            <option value="CATEGORY_D">Category D: Financial Integrity</option>
+            <option value="CATEGORY_E">Category E: Operational & Staff Security</option>
+            <option value="CATEGORY_F">Category F: System Integrity & Availability</option>
+            <option value="CATEGORY_G">Category G: Compound Attacks</option>
+          </select>
+          <input type="text" id="librarySearchInput" placeholder="Filter test cases..." 
+                 style="background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 12px; border-radius: var(--radius-sm); font-size: 12px;"
+                 onkeyup="window.filterLibrary()">
+        </div>
+      </div>
+
+      <div class="card-panel table-responsive">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Test Case Name</th>
+              <th>Category</th>
+              <th>Severity</th>
+              <th>Requesting Actor</th>
+              <th>Attack Objective</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="testLibraryTableBody">
+            <!-- Loaded via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 6: INFRASTRUCTURE MAP (PHASE 1) -->
+    <section id="pane-infrastructure" class="content-pane">
+      <div class="section-header">
+        <div class="section-title"><span>🗺️</span> Hospital Digital Twin Infrastructure</div>
+        <div style="font-size: 13px; color: var(--text-secondary);">15 Departments across 3 Primary Campus Buildings</div>
+      </div>
+      <div class="buildings-container">
+        <div class="building-column">
+          <div class="building-header"><span class="building-name">Building A: Trauma & Critical Care</span><span class="badge badge-operational">Priority 1</span></div>
+          <div class="dept-cards-list" id="buildingADepts"></div>
+        </div>
+        <div class="building-column">
+          <div class="building-header"><span class="building-name">Building B: Inpatient Towers & Diagnostics</span><span class="badge badge-operational">310 Beds</span></div>
+          <div class="dept-cards-list" id="buildingBDepts"></div>
+        </div>
+        <div class="building-column">
+          <div class="building-header"><span class="building-name">Building C: Ambulatory & Administration</span><span class="badge badge-operational">Support</span></div>
+          <div class="dept-cards-list" id="buildingCDepts"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 7: PATIENTS (PHASE 1) -->
+    <section id="pane-patients" class="content-pane">
+      <div class="section-header">
+        <div class="section-title"><span>👥</span> Synthetic Patient Directory (500 Bed Capacity)</div>
+        <div style="display: flex; gap: 10px;">
+          <input type="text" id="patientSearchInput" placeholder="Search by name, MRN, phone..." 
+                 style="background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px 14px; border-radius: var(--radius-sm); font-size: 13px; width: 280px;"
+                 onkeyup="if(event.key === 'Enter') window.searchPatients()">
+          <button class="patient-action-btn" onclick="window.searchPatients()" style="padding: 8px 14px;">Search</button>
+        </div>
+      </div>
+      <div class="card-panel table-responsive">
+        <table class="custom-table">
+          <thead>
+            <tr><th>MRN</th><th>Patient Name</th><th>DOB / Age</th><th>Gender</th><th>Blood</th><th>Phone</th><th>Status</th><th>Action</th></tr>
+          </thead>
+          <tbody id="patientsTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 8: STAFF & RESOURCES (PHASE 1) -->
+    <section id="pane-resources" class="content-pane">
+      <div class="section-header"><div class="section-title"><span>🩺</span> Hospital Staff & Resource Inventory</div></div>
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+        <div class="card-panel table-responsive">
+          <h4 style="margin-bottom: 14px; font-size: 14px; color: var(--accent-cyan);">Hospital Workforce Roster</h4>
+          <table class="custom-table">
+            <thead><tr><th>Emp ID</th><th>Name</th><th>Role</th><th>Department</th><th>Shift</th><th>Status</th></tr></thead>
+            <tbody id="staffTableBody"></tbody>
+          </table>
+        </div>
+        <div>
+          <div class="card-panel">
+            <h4 style="margin-bottom: 12px; font-size: 14px; color: var(--accent-rose);">Blood Bank Inventory</h4>
+            <div id="bloodBankList" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;"></div>
+          </div>
+          <div class="card-panel">
+            <h4 style="margin-bottom: 12px; font-size: 14px; color: var(--accent-emerald);">Central Pharmacy Stock</h4>
+            <div id="medicineStockList" style="font-size: 12px; max-height: 280px; overflow-y: auto;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 9: SCENARIOS & CONTROLS (PHASE 1) -->
+    <section id="pane-scenarios" class="content-pane">
+      <div class="section-header">
+        <div class="section-title"><span>⚡</span> Baseline Operational Scenarios (Scenarios A through G)</div>
+        <span style="font-size: 12px; color: var(--text-muted);">Dynamically transform hospital state</span>
+      </div>
+      <div class="scenarios-grid" id="scenariosContainer"></div>
+      <div class="card-panel" style="margin-top: 24px;">
+        <div class="section-header"><div class="section-title"><span>🎛️</span> Interactive Environment Toggles</div></div>
+        <div class="controls-grid">
+          <div class="control-tile">
+            <h4>Simulate Emergency Trauma Arrival</h4>
+            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Admit urgent emergency triage patient into available ED bed.</p>
+            <button class="control-btn" onclick="window.triggerEnvControl('admit_emergency')">Admit Trauma Case 🚑</button>
+          </div>
+          <div class="control-tile">
+            <h4>Simulate Patient Discharge</h4>
+            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Clear inpatient bed and transition encounter to discharge status.</p>
+            <button class="control-btn btn-warning" onclick="window.triggerEnvControl('discharge_random')">Discharge Patient 🛏️</button>
+          </div>
+          <div class="control-tile">
+            <h4>Toggle Laboratory System (LIS)</h4>
+            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Force LIS offline or restore to operational state.</p>
+            <div style="display: flex; gap: 8px; margin-top: 10px;">
+              <button class="control-btn btn-danger" style="margin-top:0;" onclick="window.toggleSubsystem('LIS', 'offline')">LIS Offline</button>
+              <button class="control-btn" style="margin-top:0;" onclick="window.toggleSubsystem('LIS', 'operational')">Restore LIS</button>
+            </div>
+          </div>
+          <div class="control-tile">
+            <h4>Toggle PACS / Radiology Network</h4>
+            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Induce packet loss or network degradation.</p>
+            <div style="display: flex; gap: 8px; margin-top: 10px;">
+              <button class="control-btn btn-danger" style="margin-top:0;" onclick="window.toggleSubsystem('PACS', 'offline')">PACS Offline</button>
+              <button class="control-btn" style="margin-top:0;" onclick="window.toggleSubsystem('PACS', 'operational')">Restore PACS</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 10: AUDIT LEDGER (PHASE 1) -->
+    <section id="pane-audit" class="content-pane">
+      <div class="section-header">
+        <div class="section-title"><span>🔒</span> Cryptographic Tamper-Evident Audit Ledger</div>
+        <div style="display: flex; gap: 10px;">
+          <button class="patient-action-btn" onclick="window.verifyAuditLedger()" style="padding: 8px 16px; background: var(--accent-emerald); color: #000; font-weight: 600;">
+            Verify Merkle Hash Integrity 🛡️
+          </button>
+          <button class="patient-action-btn" onclick="window.loadAuditEvents()" style="padding: 8px 14px;">Refresh</button>
+        </div>
+      </div>
+      <div class="card-panel" style="margin-bottom: 20px;">
+        <h4 style="margin-bottom: 12px; font-size: 14px; color: var(--accent-amber);">Adversarial Canary Secret Traps (Honeypots)</h4>
+        <div id="canaryTrapsList" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;"></div>
+      </div>
+      <div class="card-panel">
+        <h4 style="margin-bottom: 12px; font-size: 14px; color: var(--text-primary);">Audit Events Trail (Chained SHA-256 Hashes)</h4>
+        <div class="audit-stream" id="auditStreamContainer"></div>
+      </div>
+    </section>
+
+    <!-- PHASE 3: EXPERIMENT MANAGEMENT (PROFILES A-E) -->
+    <section id="pane-experiments" class="content-pane">
+      <div class="section-header">
+        <div class="section-title"><span>🧪</span> Experiment Management & Architectural Benchmarks (Profiles A–E)</div>
+        <div>
+          <button class="primary-btn" onclick="window.loadExperimentComparison()" style="padding: 8px 14px; font-size: 12px;">Refresh Matrix</button>
+        </div>
+      </div>
+
+      <!-- Comparative Matrix Table -->
+      <div class="card-panel" style="margin-bottom: 20px;">
+        <h4 style="margin-bottom: 12px; font-size: 14px; color: var(--accent-cyan);">Comparative Evaluation Across 5 Defense Profiles</h4>
+        <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 15px;" id="matrixSummaryText">
+          Loading comparative experiment benchmarks...
+        </p>
+        <div class="table-responsive">
+          <table class="custom-table" style="font-size: 12px;">
+            <thead>
+              <tr>
+                <th>Profile</th>
+                <th>Architecture Description</th>
+                <th>Tests Run</th>
+                <th>Breached</th>
+                <th>ASR %</th>
+                <th>Unauth Access</th>
+                <th>Utility %</th>
+                <th>Latency</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="experimentsMatrixBody">
+              <tr><td colspan="9" style="text-align: center; color: var(--text-muted);">Loading benchmark matrix...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Run Custom Experiment Trigger -->
+      <div class="card-panel">
+        <h4 style="margin-bottom: 12px; font-size: 14px; color: var(--text-primary);">Execute Structured Research Benchmark</h4>
+        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+          <select id="expProfileSelect" class="actor-select" style="min-width: 280px;">
+            <option value="PROFILE_A">Profile A: Insecure Baseline (Zero Guardrails)</option>
+            <option value="PROFILE_B">Profile B: RBAC Only (Role Filter)</option>
+            <option value="PROFILE_C">Profile C: RBAC + Consent + Purpose</option>
+            <option value="PROFILE_D" selected>Profile D: Full Zero-Trust Gateway + HITL</option>
+            <option value="PROFILE_E">Profile E: Full Security under Adaptive Testing</option>
+          </select>
+          <button class="primary-btn" id="btnRunExperiment" onclick="window.runSelectedExperiment()">
+            Run Benchmark Experiment
+          </button>
+          <span id="expRunStatus" style="font-size: 12px; color: var(--accent-cyan); font-family: var(--font-mono);"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHASE 3: COUNTERFACTUAL SIMULATION STUDIO -->
+    <section id="pane-counterfactual" class="content-pane">
+      <div class="section-header">
+        <div class="section-title"><span>🔮</span> Counterfactual Infrastructure Simulation Studio ("What-If" Analysis)</div>
+        <button class="patient-action-btn" onclick="window.loadBottleneckAnalysis()" style="padding: 8px 14px;">Inspect Live Bottlenecks</button>
+      </div>
+
+      <!-- Real-Time Bottleneck Warning Banner -->
+      <div class="card-panel" style="margin-bottom: 20px; border-left: 4px solid var(--accent-amber);" id="bottleneckBanner">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-weight: 600; font-size: 14px; color: var(--accent-amber);">Digital Twin Bottleneck Analysis</div>
+            <div id="bottleneckSummary" style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Evaluating hospital state...</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 11px; color: var(--text-muted);">Stress Index</div>
+            <div id="bottleneckStressScore" style="font-size: 22px; font-weight: 700; color: var(--accent-amber);">--/100</div>
+          </div>
+        </div>
+        <div id="bottleneckListContainer" style="margin-top: 12px; display: grid; gap: 8px;"></div>
+      </div>
+
+      <!-- Parameter Sliders & Simulation Controls -->
+      <div class="grid-2col" style="gap: 20px;">
+        <div class="card-panel">
+          <h4 style="margin-bottom: 15px; font-size: 14px; color: var(--accent-cyan);">Simulate Hypothetical Parameter Shifts</h4>
+          <div style="display: grid; gap: 15px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px;">
+                <span>ICU Bed Capacity Delta:</span>
+                <strong id="valIcuDelta">+10 Beds</strong>
+              </div>
+              <input type="range" min="-15" max="30" value="10" step="1" class="scenario-slider" id="inputIcuDelta" oninput="document.getElementById('valIcuDelta').innerText = (this.value >= 0 ? '+' : '') + this.value + ' Beds'">
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px;">
+                <span>ED Physician Staffing Delta:</span>
+                <strong id="valDoctorDelta">+2 Doctors</strong>
+              </div>
+              <input type="range" min="-5" max="10" value="2" step="1" class="scenario-slider" id="inputDoctorDelta" oninput="document.getElementById('valDoctorDelta').innerText = (this.value >= 0 ? '+' : '') + this.value + ' Doctors'">
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px;">
+                <span>Patient Arrival Surge Multiplier:</span>
+                <strong id="valArrivalMult">1.4x Normal</strong>
+              </div>
+              <input type="range" min="0.5" max="3.0" value="1.4" step="0.1" class="scenario-slider" id="inputArrivalMult" oninput="document.getElementById('valArrivalMult').innerText = this.value + 'x Normal'">
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px;">
+                <span>LIS Subsystem Availability:</span>
+                <strong id="valLisAvail">100%</strong>
+              </div>
+              <input type="range" min="10" max="100" value="100" step="5" class="scenario-slider" id="inputLisAvail" oninput="document.getElementById('valLisAvail').innerText = this.value + '%'">
+            </div>
+
+            <button class="primary-btn" onclick="window.runCounterfactualSimulation()" style="margin-top: 10px;">
+              Execute Counterfactual Simulation
+            </button>
+          </div>
+        </div>
+
+        <!-- Simulation Results Display -->
+        <div class="card-panel">
+          <h4 style="margin-bottom: 15px; font-size: 14px; color: var(--accent-green);">Predicted Operational Projections</h4>
+          <div id="cfResultsContainer" style="display: grid; gap: 12px;">
+            <div style="padding: 30px; text-align: center; color: var(--text-muted); font-size: 12px;">
+              Adjust parameters and click "Execute Counterfactual Simulation" to evaluate systemic dynamics.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHASE 3: SCENARIO INTELLIGENCE GENERATOR -->
+    <section id="pane-intelligence" class="content-pane">
+      <div class="section-header">
+        <div class="section-title"><span>🧠</span> Scenario Intelligence Engine (H × A × I × T × C)</div>
+      </div>
+      <div class="grid-2col" style="gap: 20px;">
+        <div class="card-panel">
+          <h4 style="margin-bottom: 12px; font-size: 14px; color: var(--accent-cyan);">Combinatorial Scenario Generator</h4>
+          <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 15px;">
+            Generates reproducible adversarial scenarios by sampling across Hospital (H), Agent (A), Infrastructure (I), Threat (T), and Constraint (C) dimensions.
+          </p>
+
+          <div style="display: grid; gap: 15px;">
+            <div>
+              <label style="font-size: 12px; display: block; margin-bottom: 5px;">Difficulty Level (0 = Normal, 5 = Compound Adaptive):</label>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                <span>Selected:</span>
+                <strong id="intelDiffVal" style="color: var(--accent-cyan);">Level 3: Interacting Anomalies</strong>
+              </div>
+              <input type="range" min="0" max="5" value="3" class="scenario-slider" id="intelDiffSlider" oninput="window.updateDifficultyLabel(this.value)">
+            </div>
+
+            <div>
+              <label style="font-size: 12px; display: block; margin-bottom: 5px;">Reproducible Random Seed (Optional):</label>
+              <input type="number" id="intelSeedInput" class="hosa-input" placeholder="e.g. 42, 1001, 9999" style="font-family: var(--font-mono);">
+            </div>
+
+            <button class="primary-btn" onclick="window.generateIntelligentScenario()">
+              Synthesize Scenario Space
+            </button>
+          </div>
+        </div>
+
+        <div class="card-panel">
+          <h4 style="margin-bottom: 12px; font-size: 14px; color: var(--accent-green);">Synthesized Scenario Details</h4>
+          <div id="intelScenarioViewer" style="background: rgba(0,0,0,0.3); border-radius: 6px; padding: 15px; font-family: var(--font-mono); font-size: 12px; max-height: 420px; overflow-y: auto;">
+            <span style="color: var(--text-muted);">Click "Synthesize Scenario Space" to generate and inspect.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHASE 3: DATASETS & RESEARCH REPORTS -->
+    <section id="pane-reports" class="content-pane">
+      <div class="section-header">
+        <div class="section-title"><span>📈</span> Behavioral Telemetry Datasets & Academic Research Reports</div>
+      </div>
+
+      <div class="grid-2col" style="gap: 20px; margin-bottom: 20px;">
+        <!-- Datasets Export Card -->
+        <div class="card-panel">
+          <h4 style="margin-bottom: 12px; font-size: 14px; color: var(--accent-cyan);">Download Behavioral Telemetry Datasets</h4>
+          <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 15px;">
+            Export raw and structured telemetry across Agent Behavior, Digital Twin Environment, and Policy Interaction streams.
+          </p>
+          <div style="display: grid; gap: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 6px;">
+              <div>
+                <strong>Dataset A: Agent Behavior</strong>
+                <div style="font-size: 11px; color: var(--text-muted);">Task selections, prompt categories, tool invocations, safe refusals</div>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <a href="/api/v1/research/datasets/agent?format=json" class="patient-action-btn" download style="text-decoration: none;">JSON</a>
+                <a href="/api/v1/research/datasets/agent?format=csv" class="patient-action-btn" download style="text-decoration: none;">CSV</a>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 6px;">
+              <div>
+                <strong>Dataset B: Hospital Environment</strong>
+                <div style="font-size: 11px; color: var(--text-muted);">Bed saturation, ED queue, subsystem health, systemic stress index</div>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <a href="/api/v1/research/datasets/environment?format=json" class="patient-action-btn" download style="text-decoration: none;">JSON</a>
+                <a href="/api/v1/research/datasets/environment?format=csv" class="patient-action-btn" download style="text-decoration: none;">CSV</a>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 6px;">
+              <div>
+                <strong>Dataset C: Interaction Telemetry</strong>
+                <div style="font-size: 11px; color: var(--text-muted);">Policy gate decisions, canary trips, disruption levels, latency</div>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <a href="/api/v1/research/datasets/interaction?format=json" class="patient-action-btn" download style="text-decoration: none;">JSON</a>
+                <a href="/api/v1/research/datasets/interaction?format=csv" class="patient-action-btn" download style="text-decoration: none;">CSV</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Academic Report Generator Card -->
+        <div class="card-panel">
+          <h4 style="margin-bottom: 12px; font-size: 14px; color: var(--accent-green);">Generate Academic Benchmark Report</h4>
+          <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 15px;">
+            Export publication-grade research report compiling methodology, quantitative ASR deltas, and vulnerability analysis.
+          </p>
+          <div style="display: grid; gap: 12px;">
+            <div>
+              <label style="font-size: 12px; display: block; margin-bottom: 5px;">Select Executed Benchmark Experiment:</label>
+              <select id="reportExpSelect" class="actor-select" style="width: 100%;">
+                <option value="LATEST">Latest Executed Experiment Benchmark</option>
+              </select>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+              <button class="primary-btn" onclick="window.downloadReport('markdown')" style="flex: 1;">
+                📄 Markdown (.md)
+              </button>
+              <button class="primary-btn" onclick="window.downloadReport('json')" style="flex: 1; background: var(--accent-blue);">
+                📊 JSON (.json)
+              </button>
+              <button class="primary-btn" onclick="window.downloadReport('csv')" style="flex: 1; background: var(--accent-purple);">
+                📑 CSV Matrix (.csv)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AAVA Multi-Round Adaptive Campaign Runner Card -->
+      <div class="card-panel">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h4 style="font-size: 14px; color: var(--accent-red);">AAVA 4-Round Escalating Adaptive Red-Team Campaign</h4>
+          <button class="primary-btn" onclick="window.runAdaptiveCampaignUI()" style="background: var(--accent-red); font-size: 12px; padding: 6px 14px;">
+            Execute 4-Round Campaign
+          </button>
+        </div>
+        <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">
+          Runs AAVA's dynamic 4-round escalation loop: Direct probe &rarr; Document referral injection &rarr; Counterfeit supervisor token &rarr; Subsystem outage stress.
+        </p>
+        <div id="adaptiveCampaignTimeline" style="display: grid; gap: 8px;">
+          <span style="font-size: 12px; color: var(--text-muted);">Campaign ready to execute.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 11: RBAC MATRIX (PHASE 1) -->
+    <section id="pane-matrix" class="content-pane">
+      <div class="section-header"><div class="section-title"><span>🛡️</span> Hospital Operational Security & RBAC Matrix</div></div>
+      <div class="card-panel">
+        <div class="table-responsive">
+          <table class="custom-table" style="font-size: 12px;">
+            <thead><tr><th>Actor Role</th><th>Clinical Records</th><th>Lab & Radiology</th><th>Medications</th><th>Billing</th><th>Audit</th><th>Key Invariant</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Doctor</strong></td><td><span class="badge badge-operational">Full Read/Draft</span></td><td><span class="badge badge-operational">Order & Read</span></td><td><span class="badge badge-operational">Prescribe</span></td><td><span class="badge badge-degraded">Limited</span></td><td><span class="badge badge-offline">Denied</span></td><td>Cannot delete audit records; cannot alter invoices.</td></tr>
+              <tr><td><strong>Nurse</strong></td><td><span class="badge badge-operational">Read Assigned</span></td><td><span class="badge badge-operational">Collect</span></td><td><span class="badge badge-operational">Administer</span></td><td><span class="badge badge-offline">Denied</span></td><td><span class="badge badge-offline">Denied</span></td><td>Cannot prescribe controlled substances; no billing access.</td></tr>
+              <tr><td><strong>Lab Tech</strong></td><td><span class="badge badge-offline">Denied</span></td><td><span class="badge badge-operational">Enter Results</span></td><td><span class="badge badge-offline">Denied</span></td><td><span class="badge badge-offline">Denied</span></td><td><span class="badge badge-offline">Denied</span></td><td>Cannot read psychiatric notes, billing, or encounter diagnoses.</td></tr>
+              <tr><td><strong>Billing Officer</strong></td><td><span class="badge badge-offline">DENIED (403)</span></td><td><span class="badge badge-offline">DENIED (403)</span></td><td><span class="badge badge-offline">Denied</span></td><td><span class="badge badge-operational">Invoicing</span></td><td><span class="badge badge-offline">Denied</span></td><td>Zero access to clinical labs, notes, or imaging.</td></tr>
+              <tr><td><strong>HOSA (AI Agent)</strong></td><td><span class="badge badge-operational">Read Scoped</span></td><td><span class="badge badge-operational">Draft Order</span></td><td><span class="badge badge-degraded">Draft Only</span></td><td><span class="badge badge-degraded">Draft Only</span></td><td><span class="badge badge-offline">Denied</span></td><td>Tool Gateway enforced; human clinician approval required for state changes.</td></tr>
+              <tr><td><strong>Adversary (AAVA)</strong></td><td><span class="badge badge-offline">DENIED (403)</span></td><td><span class="badge badge-offline">DENIED (403)</span></td><td><span class="badge badge-offline">DENIED (403)</span></td><td><span class="badge badge-offline">DENIED (403)</span></td><td><span class="badge badge-offline">DENIED (403)</span></td><td>Zero legitimate permissions; probe attempts trapped and logged.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- PATIENT DETAILS MODAL -->
+  <div class="modal-overlay" id="patientModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h3 id="modalPatientName" style="font-size: 18px;">Patient Profile</h3>
+          <span id="modalPatientMrn" style="font-size: 12px; color: var(--accent-cyan); font-family: var(--font-mono);">MRN-20260001</span>
+        </div>
+        <button class="modal-close" onclick="window.closePatientModal()">✕</button>
+      </div>
+      <div class="modal-tabs">
+        <button class="modal-tab-btn active" onclick="window.switchModalTab('demographics', this)">Demographics</button>
+        <button class="modal-tab-btn" onclick="window.switchModalTab('encounters', this)">Encounters</button>
+        <button class="modal-tab-btn" onclick="window.switchModalTab('clinical', this)">Medical & Labs</button>
+        <button class="modal-tab-btn" onclick="window.switchModalTab('radiology', this)">Radiology</button>
+        <button class="modal-tab-btn" onclick="window.switchModalTab('consents', this)">Consents</button>
+        <button class="modal-tab-btn" onclick="window.switchModalTab('fhir', this)">HL7 FHIR JSON</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <div id="toastContainer"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

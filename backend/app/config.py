@@ -6,7 +6,10 @@ class Settings(BaseModel):
     APP_VERSION: str = "1.0.0"
     HOSPITAL_NAME: str = "Aethelgard Memorial Hospital"
     TOTAL_BEDS: int = 500
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./kratos_hospital.db")
+    DATABASE_URL: str = os.getenv(
+        "DATABASE_URL",
+        "sqlite:////tmp/kratos_hospital.db" if os.getenv("VERCEL") else "sqlite:///./kratos_hospital.db"
+    )
     DEBUG: bool = os.getenv("DEBUG", "true").lower() in ("true", "1")
     CORS_ORIGINS: list[str] = ["*"]
     
